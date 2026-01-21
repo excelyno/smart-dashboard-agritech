@@ -4,7 +4,7 @@ import cors from 'cors'
 import connectDB from './config/db.js';
 import readingRoutes from './routes/readingRoutes.js';
 import logger from './middleware/logger.js';
-
+import deviceRoutes from './routes/deviceRoutes.js'
 
 //koneksi buat database
 connectDB();
@@ -19,6 +19,7 @@ app.use(logger)
 //routing
 //semua request berawalan routes
 app.use('/api/readings', readingRoutes)
+app.use('/api/devices', deviceRoutes)
 
 //root endpoint (checking server menyala di root)
 app.get('/',(req, res) => {
