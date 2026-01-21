@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Thermometer, Droplets, Activity } from 'lucide-react'; // Icon
+import { Thermometer, Droplets, Activity } from 'lucide-react';
 import InfoCard from './components/InfoCard';
 import HistoryChart from './components/HistoryChart';
-import './App.css'; // Import CSS yang tadi dibuat
+import PumpControl from './components/PumpControl';
+import './App.css';
 
 function App() {
   const [latestData, setLatestData] = useState(null);
   const [historyData, setHistoryData] = useState([]);
+  const [pumpStatus, setPumpStatus] = useState('OFF');
+
 
   // Fungsi ambil data dari backend
   const fetchData = async () => {
@@ -20,10 +23,27 @@ function App() {
       const historyRes = await axios.get('http://localhost:5000/api/readings/history');
       setHistoryData(historyRes.data);
       
+      //3. menambahkan status dari pompa air (devices)
+      const pumpRes = await axios.get('http://localhost:5000/api/devices/pump')
+      setPumpStatus(pumpRes.data.status)
+
     } catch (error) {
       console.error("Gagal ambil data:", error);
     }
   };
+
+// 2. Fungsi saat tombol ditekan
+  const handleTogglePump = async () => {
+    try {
+      const res = await axios.post(`http://localhost:5000/api/devices/pump/toggle`);
+      // Update state sesuai respon backend
+      setPumpStatus(res.data.data.status);
+    } catch (error) {
+      alert("Gagal mengubah status pompa!");
+    }
+  };
+
+
 
   // Jalankan saat pertama kali load & set interval
   useEffect(() => {
@@ -31,6 +51,11 @@ function App() {
     const interval = setInterval(fetchData, 5000); // Ulang tiap 5 detik
     return () => clearInterval(interval); // Bersihkan saat close
   }, []);
+
+// Logika warna (seperti sebelumnya)
+  const tempColor = latestData && latestData.temperature > 32 ? '#d63031' : '#0984e3';
+  const tempStatus = latestData && latestData.temperature > 32 ? 'PANAS ⚠️' : 'Normal ✅';
+
 
   return (
     <div className="container">
@@ -52,12 +77,9 @@ function App() {
           icon={Droplets}
           color="#4ecdc4"
         />
-        <InfoCard 
-          label="Status Alat"
-          value="ON"
-          unit=""
-          icon={Activity}
-          color="#2ecc71"
+        <PumpControl 
+          status={pumpStatus} 
+          onToggle={handleTogglePump} 
         />
       </div>
 

@@ -63,3 +63,40 @@ h1 {
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
+
+/* --- Tambahan untuk Kontrol --- */
+.control-card {
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+/* Tombol Besar */
+.toggle-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+  color: white;
+  margin-top: 10px;
+}
+
+/* Warna saat ON (Hijau) */
+.btn-on {
+  background-color: #2ecc71;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+}
+.btn-on:hover {
+  background-color: #27ae60;
+}
+
+/* Warna saat OFF (Abu Gelap) */
+.btn-off {
+  background-color: #95a5a6;
+}
+.btn-off:hover {
+  background-color: #7f8c8d;
+}

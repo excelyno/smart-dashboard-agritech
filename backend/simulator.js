@@ -35,6 +35,24 @@ const postData = async () => {
   }
 };
 
+//cek status pompa
+
+const checkPumpStatus = async () => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/devices/pump');
+    const status = response.data.status;
+    
+    if (status === 'ON') {
+      console.log("\n💦 [ACTUATOR] POMPA MENYALA! MENYIRAM TANAMAN... 💦");
+    } else {
+      console.log("\nzzz [ACTUATOR] Pompa Mati.");
+    }
+  } catch (error) {
+    console.log("Gagal cek status pompa");
+  }
+};
+
+
 // --- EKSEKUSI UTAMA ---
 console.log("🌱 Memulai Simulasi Smart Farming...");
 console.log("📡 Mengirim data setiap 5 detik...");
@@ -44,3 +62,5 @@ postData();
 
 // Ulangi fungsi postData setiap 5000 milidetik (5 detik)
 setInterval(postData, 5000);
+
+setInterval(checkPumpStatus, 3000);
